@@ -54,6 +54,9 @@ highlightButton.onclick = () => {
             });
         }
         console.log(sentenceParams);
+
+        document.getElementById("code-stage").className += " bottom-active";
+
     }
     fileReader.readAsText(file);
 }

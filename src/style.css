@@ -1,0 +1,33 @@
+#code-stage {
+    width: 800px;
+
+}
+
+.highlight-data {
+    display: none;
+}
+
+.top-active {
+    -webkit-transition: 1s;
+	-moz-transition: 1s;
+	-o-transition: 1s;
+    transition: 1s cubic-bezier(0, 0, 0.58, 1.0);
+
+	transform-origin: left bottom;
+    transform: 
+        translateY(-2000px)
+        rotate(-270deg);
+}
+
+.bottom-active {
+    -webkit-transition: 1s;
+	-moz-transition: 1s;
+	-o-transition: 1s;
+    transition: 1s cubic-bezier(0, 0, 0.58, 1.0);
+
+	transform-origin: left top;
+    transform: 
+        /* translateY(-1000px) */
+        translateY(800px)
+        rotate(-90deg);
+}
