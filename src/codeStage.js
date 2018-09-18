@@ -1,5 +1,4 @@
 
-
 const hljsKeywords = [
     "hljs-keyword",
     "hljs-string",
@@ -15,58 +14,78 @@ const hljsKeywords = [
     "hljs-title",
 ]
 
-let files;
+let sentenceParams;
+let resizeParam = 0;
 
-let fileSelector = document.getElementById("file-selector");
-fileSelector.onchange = (ev) => {
-    files = ev.currentTarget.files;
-};
 
-let highlightButton = document.getElementById("highlight-button");
-highlightButton.onclick = () => {
-    let file = files[0];
-    let fileReader = new FileReader();
-    fileReader.onload = () => {
-        let code = fileReader.result;
-        let codeContainer = document.getElementById("code-container");
-        codeContainer.innerHTML = hljs.highlightAuto(code).value;
+function setup() {
+    let canvas = createCanvas(1000, 800);
+    canvas.parent('#sketch-container');
 
-        let sentenceArray = codeContainer.innerText.split(/\r\n|\r|\n/);
-        let lengthArray = sentenceArray.map((x)=>x.length);
+    let files;
+    let fileSelector = select('#file-selector');
+    // console.log(fileSelector);
+    fileSelector.elt.onchange = (ev) => {
+        files = ev.currentTarget.files;
+    };
 
-        htmlArray = codeContainer.innerHTML.split(/\r\n|\r|\n/);
-        let keywordArray = htmlArray.map((x)=>{
-            h = [];
-            hljsKeywords.map((k)=>{
-                x.match(k) && h.push(k);
-            });
-            return h;
-        })
-        // console.log(hljsArray);
+    let highlightButton = select('#highlight-button');
+    highlightButton.elt.onclick = () => {
+        let file = files[0];
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+            let code = fileReader.result;
+            let codeContainer = document.getElementById("code-container");
+            codeContainer.innerHTML = hljs.highlightAuto(code).value;
 
-        // JSONの作成
-        let sentenceParams = [];
-        let len = sentenceArray.length;
-        for(let i=0; i<len; i++){
-            sentenceParams.push({
-                length: lengthArray[i],
-                hljsKeywords: keywordArray[i],
-            });
+            // console.log(codeContainer.offsetHeight);
+            // console.log(codeContainer.height);
+            resizeParam = codeContainer.offsetHeight;
+
+            let sentenceArray = codeContainer.innerText.split(/\r\n|\r|\n/);
+            let lengthArray = sentenceArray.map((x)=>x.length);
+
+            htmlArray = codeContainer.innerHTML.split(/\r\n|\r|\n/);
+            let keywordArray = htmlArray.map((x)=>{
+                h = [];
+                hljsKeywords.map((k)=>{
+                    x.match(k) && h.push(k);
+                });
+                return h;
+            })
+            // console.log(hljsArray);
+
+            // JSONの作成
+            sentenceParams = [];
+            let len = sentenceArray.length;
+            for(let i=0; i<len; i++){
+                sentenceParams.push({
+                    length: lengthArray[i],
+                    hljsKeywords: keywordArray[i],
+                });
+            }
+
+            document.getElementById("code-stage").className += " bottom-active";
+
         }
-        console.log(sentenceParams);
-
-        document.getElementById("code-stage").className += " bottom-active";
-
-    }
-    fileReader.readAsText(file);
+        fileReader.readAsText(file);
+    };
 }
 
+function draw() {
+    // console.log(resizeParam);
+    if (resizeParam !== 0) {
+        // console.log(true);
+        resizeCanvas(resizeParam, 800);
+        resizeParam = 0;
+        // console.log(resizeParam);
+    };
 
-// let testContainer = document.getElementById("test-container");
-
-// sentenceElems.map((x)=>{
-//     let c = document.createElement("code");
-//     c.innerHTML = x;
-//     let p = document.createElement("pre").appendChild(c);
-//     testContainer.appendChild(p);
-// })
+    background(255);
+    // sentenceParams && console.log(sentenceParams);
+    sentenceParams && sentenceParams.forEach((v, i) => {
+        // console.log(v, i);
+        fill(255, 0, 0);
+        rect(i*30, height-1, 30, -10*v.length);
+    });
+}
