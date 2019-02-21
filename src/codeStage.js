@@ -15,45 +15,41 @@ const hljsKeywords = [
 ]
 
 let sentenceParams;
-let resizeParam = 0;
-
 
 function setup() {
     let canvas = createCanvas(1000, 800);
     canvas.parent('#sketch-container');
 
     let files;
-    let fileSelector = select('#file-selector');
-    // console.log(fileSelector);
+    let fileSelector = select('#file-selector-top');
     fileSelector.elt.onchange = (ev) => {
         files = ev.currentTarget.files;
     };
 
-    let highlightButton = select('#highlight-button');
+    let highlightButton = select('#highlight-button-top');
     highlightButton.elt.onclick = () => {
-        let file = files[0];
+        if (files[0]===null) return;
+        const file = files[0];
         let fileReader = new FileReader();
         fileReader.onload = () => {
-            let code = fileReader.result;
+            const code = fileReader.result;
             let codeContainer = document.getElementById("code-container");
             codeContainer.innerHTML = hljs.highlightAuto(code).value;
 
-            // console.log(codeContainer.offsetHeight);
-            // console.log(codeContainer.height);
-            resizeParam = codeContainer.offsetHeight;
-
-            let sentenceArray = codeContainer.innerText.split(/\r\n|\r|\n/);
-            let lengthArray = sentenceArray.map((x)=>x.length);
+            const sentenceArray = codeContainer.innerText.split(/\r\n|\r|\n/);
+            const lengthArray = sentenceArray.map((x)=>x.length);
 
             htmlArray = codeContainer.innerHTML.split(/\r\n|\r|\n/);
-            let keywordArray = htmlArray.map((x)=>{
-                h = [];
-                hljsKeywords.map((k)=>{
-                    x.match(k) && h.push(k);
+            const keywordArray = htmlArray.map((row)=>{
+                resArray = [];
+                hljsKeywords.map((key)=>{
+                    if (row.match(key)) {
+                        resArray.push(key);
+                    }
                 });
-                return h;
+                return resArray;
             })
-            // console.log(hljsArray);
+            console.log(htmlArray);
 
             // JSONの作成
             sentenceParams = [];
@@ -66,26 +62,29 @@ function setup() {
             }
 
             document.getElementById("code-stage").className += " bottom-active";
-
+            resizeCanvas(codeContainer.offsetHeight, 800);
         }
         fileReader.readAsText(file);
     };
 }
 
-function draw() {
-    // console.log(resizeParam);
-    if (resizeParam !== 0) {
-        // console.log(true);
-        resizeCanvas(resizeParam, 800);
-        resizeParam = 0;
-        // console.log(resizeParam);
-    };
+function draw() {    
+    background(200);
 
-    background(255);
-    // sentenceParams && console.log(sentenceParams);
-    sentenceParams && sentenceParams.forEach((v, i) => {
-        // console.log(v, i);
-        fill(255, 0, 0);
-        rect(i*30, height-1, 30, -10*v.length);
-    });
+    if (sentenceParams) {
+        sentenceParams.forEach((v, i) => {
+            fill(255, 0, 0);
+            rect(i*30, height-1, 30, -10*v.length);
+        });
+    }
+
+    let bottomActive = document.getElementsByClassName('bottom-active')[0];
+ 
+    let getTransformY = (elem) => {
+        let matrix = getComputedStyle(elem).transform;
+        console.log(matrix);
+        console.log('hage');
+        return matrix;
+    }
+    getTransformY(bottomActive);
 }
