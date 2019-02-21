@@ -20,20 +20,24 @@
         <p>
             ステージ上部 
             <input id='file-selector-top' type='file' />
-            <input id='highlight-button-top' type='button' value='ハイライト' />
         </p>
         <p>
             ステージ下部 
             <input id='file-selector-bottom' type='file' />
-            <input id='highlight-button-bottom' type='button' value='ハイライト' />
         </p>
-        <pre id='code-stage'><code id='code-container'></code></pre>
+        <p>
+            <input id='highlight-button' type='button' value='ハイライト' />
+        </p>
+        <pre id='code-stage-bottom'><code id='code-container-bottom'></code></pre>
+        <pre id='code-stage-top'><code id='code-container-top'></code></pre>
+
     </div>
 
     <script src="./src/p5.js"></script>
     <script src="./src/p5.dom.js"></script>
     <script src="./src/highlight/highlight.pack.js"></script>
-    <script src="src/codeStage.js"></script>
+    <script src="./src/anime/lib/anime.min.js"></script>
+    <script src="./src/codeStage.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
