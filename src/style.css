@@ -1,34 +1,37 @@
 #code-stage-top {
-    width: 400px;
-
+    position: absolute;
+    width: 600px;
+    transform-origin: left bottom;
+    /* z-index: -1; */
 }
 
 #code-stage-bottom {
-    width: 400px;
+    position: absolute;
+    width: 600px;
+    transform-origin: left top;
+    /* z-index: -1; */
 }
 
 .highlight-data {
     display: none;
 }
-
+/* 
 .top-active {
     -webkit-transition: 1s;
 	-moz-transition: 1s;
 	-o-transition: 1s;
     transition: 1s cubic-bezier(0, 0, 0.58, 1.0);
 
-	transform-origin: left bottom;
     transform: 
         translateY(-2000px)
         rotate(-270deg);
 }
 
-.bottom-active {
+.bottom-active {/*
     /* transition: 1s cubic-bezier(0, 0, 0.58, 1.0);
     transform:
         translateY(100px); */
-    transform-origin: left top;
-    animation:
+    /*animation:
         rotate 1s cubic-bezier(0, 0, 0.58, 1.0) 0s forwards,
         fade 2s cubic-bezier(0, 0, 0.58, 1.0) 1s forwards;
 }
@@ -54,12 +57,12 @@
 @keyframes fade {
     from { opacity: 1; }
     to { opacity: 0.5; }
-}
+} */
 
 #defaultCanvas0 {
     position: absolute;
-    top: 63px;
+    top: 140px;
     left: 8px;
-    z-index: -1;
+    z-index: -2;
     /* opacity: 0; */
 }
