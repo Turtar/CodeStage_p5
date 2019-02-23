@@ -60,9 +60,9 @@
 } */
 
 #defaultCanvas0 {
-    position: absolute;
-    top: 140px;
-    left: 8px;
+    /* position: absolute; */
+    /* top: 140px; */
+    /* left: 8px; */
     z-index: -2;
     /* opacity: 0; */
 }

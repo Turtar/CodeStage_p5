@@ -20,6 +20,7 @@ let sentenceParamsBottom = [];
 let flag = true;
 let topWSlider, topHSlider;
 let bottomWSlider, bottomHSlider;
+let stageScrollX = 0;
 
 let createParamsJson = (file, codeContainer, sentenceParams, isTop) => {
     if (file===null) return;
@@ -82,17 +83,18 @@ let createParamsJson = (file, codeContainer, sentenceParams, isTop) => {
                 delay: 150,
             });
         // document.getElementById(`code-stage-${stagePart}`).className += ` ${stagePart}-active`
-        const canvasHeight = parseInt(canvas.style.height.match(/\d+/)[0], 10);
-        const canvasWidth = parseInt(canvas.style.width.match(/\d+/)[0], 10);
-        if (canvasHeight===400 || canvasWidth<codeContainer.offsetHeight) {
-            resizeCanvas(codeContainer.offsetHeight, 600);
-        }
+        
+        // const canvasHeight = parseInt(canvas.style.height.match(/\d+/)[0], 10);
+        // const canvasWidth = parseInt(canvas.style.width.match(/\d+/)[0], 10);
+        // if (canvasHeight===400 || canvasWidth<codeContainer.offsetHeight) {
+        //     resizeCanvas(codeContainer.offsetHeight, 600);
+        // }
     }
     fileReader.readAsText(file);
 }
 
 function setup() {
-    let canvas = createCanvas(600, 400);
+    let canvas = createCanvas(1000, 600);
     canvas.parent('#sketch-container');
     topWSlider = createSlider(0, 300, 83);
     topWSlider.position(20, 150);
@@ -102,6 +104,9 @@ function setup() {
     bottomWSlider.position(20, 190);
     bottomHSlider = createSlider(0, 300, 70);
     bottomHSlider.position(20, 210);
+
+    stageScrollSlider = createSlider(0, 100, 0);
+    stageScrollSlider.position(20, 250);
     
     document.getElementById("code-stage-top").style.zIndex = -10;
     document.getElementById("code-stage-bottom").style.zIndex = -10;
@@ -132,9 +137,9 @@ function draw() {
 
     background(200);
 
-
+    push();
+    translate(stageScrollX, 0);
     if (sentenceParamsTop) {
-        push();
         sentenceParamsTop.forEach((v, i) => {
             const w = 18, h = 7;
             const wRate = topWSlider.value()*0.01, hRate = topHSlider.value()*0.01;
@@ -142,11 +147,10 @@ function draw() {
             fill('#CF9848');
             rect(5+i*w*wRate, 1, w*wRate, h*v.length*hRate);
         });
-        pop();
     }
 
     if (sentenceParamsBottom) {
-        push();
+        // push();
         sentenceParamsBottom.forEach((v, i) => {
             const w = 18, h = -7;
             const wRate = bottomWSlider.value()*0.01, hRate = bottomHSlider.value()*0.01;
@@ -154,20 +158,18 @@ function draw() {
             fill('#CF9848');
             rect(7+i*w*wRate, height-1, w*wRate, h*v.length*hRate);
         });
-        pop();
+        // pop();
     }
+    pop();
 
     noStroke();
     fill(0, 100);
     rect(0, 0, 200, 100);
+}
 
-    // let bottomActive = document.getElementsByClassName('bottom-active')[0];
- 
-    // let getTransformY = (elem) => {
-    //     let matrix = getComputedStyle(elem).transform;
-    //     console.log(matrix);
-    //     console.log('hage');
-    //     return matrix;
-    // }
-    // getTransformY(bottomActive);
+function mouseDragged() {
+    if (mouseX>0 && mouseX<width && mouseY>0 && mouseY<height
+        && !(mouseX>0 && mouseX<200 && mouseY>0 && mouseY<100)) {
+        stageScrollX -= pmouseX - mouseX;
+    }
 }
