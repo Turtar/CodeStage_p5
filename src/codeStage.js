@@ -15,11 +15,11 @@ const hljsKeywords = [
     "hljs-title",
 ]
 
-let sentenceParamsTop = [];
-let sentenceParamsBottom = [];
-let flag = true;
+let sentenceParamsTop = [], sentenceParamsBottom = [];
+let flag = true, isStarted = false;
 let topWSlider, topHSlider;
 let bottomWSlider, bottomHSlider;
+let startButton;
 let stageScrollX = 0;
 
 let createParamsJson = (file, codeContainer, sentenceParams, isTop) => {
@@ -42,10 +42,8 @@ let createParamsJson = (file, codeContainer, sentenceParams, isTop) => {
             });
             return resArray;
         });
-        // console.log(htmlArray);
 
         // JSONの作成
-        // sentenceParams = [];
         let len = sentenceArray.length;
         for(let i=0; i<len; i++){
             sentenceParams.push({
@@ -82,13 +80,6 @@ let createParamsJson = (file, codeContainer, sentenceParams, isTop) => {
                 zIndex: -100,
                 delay: 150,
             });
-        // document.getElementById(`code-stage-${stagePart}`).className += ` ${stagePart}-active`
-        
-        // const canvasHeight = parseInt(canvas.style.height.match(/\d+/)[0], 10);
-        // const canvasWidth = parseInt(canvas.style.width.match(/\d+/)[0], 10);
-        // if (canvasHeight===400 || canvasWidth<codeContainer.offsetHeight) {
-        //     resizeCanvas(codeContainer.offsetHeight, 600);
-        // }
     }
     fileReader.readAsText(file);
 }
@@ -97,16 +88,20 @@ function setup() {
     let canvas = createCanvas(1000, 600);
     canvas.parent('#sketch-container');
     topWSlider = createSlider(0, 300, 83);
-    topWSlider.position(20, 150);
+    topWSlider.position(20, 140);
     topHSlider = createSlider(0, 300, 70);
-    topHSlider.position(20, 170);
+    topHSlider.position(20, 160);
     bottomWSlider = createSlider(0, 300, 83);
-    bottomWSlider.position(20, 190);
+    bottomWSlider.position(20, 180);
     bottomHSlider = createSlider(0, 300, 70);
-    bottomHSlider.position(20, 210);
-
-    stageScrollSlider = createSlider(0, 100, 0);
-    stageScrollSlider.position(20, 250);
+    bottomHSlider.position(20, 200);
+    startButton = createButton('START');
+    startButton.position(20, 230);
+    startButton.mousePressed(() => {
+        stageScrollX = 0;
+        isStarted = true;
+        console.log(true);
+    });
     
     document.getElementById("code-stage-top").style.zIndex = -10;
     document.getElementById("code-stage-bottom").style.zIndex = -10;
@@ -138,7 +133,12 @@ function draw() {
     background(200);
 
     push();
-    translate(stageScrollX, 0);
+    if (!isStarted) {
+        translate(stageScrollX, 0);
+    } else {
+        translate(stageScrollX, 0);
+        stageScrollX -= 1;
+    }
     if (sentenceParamsTop) {
         sentenceParamsTop.forEach((v, i) => {
             const w = 18, h = 7;
@@ -150,7 +150,6 @@ function draw() {
     }
 
     if (sentenceParamsBottom) {
-        // push();
         sentenceParamsBottom.forEach((v, i) => {
             const w = 18, h = -7;
             const wRate = bottomWSlider.value()*0.01, hRate = bottomHSlider.value()*0.01;
@@ -158,18 +157,21 @@ function draw() {
             fill('#CF9848');
             rect(7+i*w*wRate, height-1, w*wRate, h*v.length*hRate);
         });
-        // pop();
     }
     pop();
 
     noStroke();
     fill(0, 100);
-    rect(0, 0, 200, 100);
+    rect(0, 0, 200, 120);
 }
 
 function mouseDragged() {
-    if (mouseX>0 && mouseX<width && mouseY>0 && mouseY<height
-        && !(mouseX>0 && mouseX<200 && mouseY>0 && mouseY<100)) {
-        stageScrollX -= pmouseX - mouseX;
-    }
+    if (isStarted) return;
+    if (!(isInBox(mouseX, mouseY, 0, width, 0, height))) return;
+    if (isInBox(mouseX, mouseY, 0, 200, 0, 100)) return;
+    stageScrollX -= pmouseX - mouseX;
+}
+
+function isInBox(x, y, x1, x2, y1, y2) {
+    return x>x1 && x<x2 && y>y1 && y<y2;
 }
