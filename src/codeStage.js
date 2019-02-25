@@ -16,11 +16,12 @@ const hljsKeywords = [
 ]
 
 let sentenceParamsTop = [], sentenceParamsBottom = [];
-let flag = true, isStarted = false;
+let isTopReversed = true, isStarted = false;
 let topWSlider, topHSlider;
 let bottomWSlider, bottomHSlider;
 let startButton;
 let stageScrollX = 0;
+let playerX = playerY = 0;
 
 let createParamsJson = (file, codeContainer, sentenceParams, isTop) => {
     if (file===null) return;
@@ -95,13 +96,14 @@ function setup() {
     bottomWSlider.position(20, 180);
     bottomHSlider = createSlider(0, 300, 70);
     bottomHSlider.position(20, 200);
-    startButton = createButton('START');
+    startButton = createButton('Play Game');
     startButton.position(20, 230);
     startButton.mousePressed(() => {
         stageScrollX = 0;
         isStarted = true;
-        console.log(true);
     });
+    playerX = 10.0;
+    playerY = height/2.0;
     
     document.getElementById("code-stage-top").style.zIndex = -10;
     document.getElementById("code-stage-bottom").style.zIndex = -10;
@@ -125,9 +127,9 @@ function setup() {
 }
 
 function draw() {
-    if (sentenceParamsTop.length>0 && flag) { 
+    if (sentenceParamsTop.length>0 && isTopReversed) { 
         sentenceParamsTop.reverse();
-        flag = false;
+        isTopReversed = false;
     }
 
     background(200);
@@ -146,6 +148,48 @@ function draw() {
             noStroke();
             fill('#CF9848');
             rect(5+i*w*wRate, 1, w*wRate, h*v.length*hRate);
+            v.hljsKeywords.forEach((item) => {
+                switch (item) {
+                    case "hljs-keyword":
+                        fill(255, 0, 0);
+                        break;
+                    case "hljs-string":
+                        fill(0, 255, 0);
+                        break;
+                    case "hljs-class":
+                        fill(0, 0, 255);
+                        break;
+                    case "hljs-attr":
+                        fill(255, 255, 0);
+                        break;
+                    case "hljs-literal":
+                        fill(255, 0, 255);
+                        break;
+                    case "hljs-built_in":
+                        fill(0, 255, 255);
+                        break;
+                    case "hljs-meta":
+                        fill(255, 255, 255);
+                        break;
+                    case "hljs-number":
+                        fill(0, 0, 0);
+                        break;
+                    case "hljs-function":
+                        fill(255, 100, 0);
+                        break;
+                    case "hljs-comment":
+                        fill(100, 255, 0);
+                        break;
+                    case "hljs-symbol":
+                        fill(0, 255, 100);
+                        break;
+                    case "hljs-title":
+                        fill(0, 100, 255);
+                        break;
+                }
+                ellipse(5+i*w*wRate + w*wRate/2.0 + random(-10, 10), height/2.0+random(-10, 10), 10, 10);
+            });
+
         });
     }
 
@@ -156,8 +200,58 @@ function draw() {
             noStroke();
             fill('#CF9848');
             rect(7+i*w*wRate, height-1, w*wRate, h*v.length*hRate);
+            v.hljsKeywords.forEach((item) => {
+                switch (item) {
+                    case "hljs-keyword":
+                        fill(255, 0, 0);
+                        break;
+                    case "hljs-string":
+                        fill(0, 255, 0);
+                        break;
+                    case "hljs-class":
+                        fill(0, 0, 255);
+                        break;
+                    case "hljs-attr":
+                        fill(255, 255, 0);
+                        break;
+                    case "hljs-literal":
+                        fill(255, 0, 255);
+                        break;
+                    case "hljs-built_in":
+                        fill(0, 255, 255);
+                        break;
+                    case "hljs-meta":
+                        fill(255, 255, 255);
+                        break;
+                    case "hljs-number":
+                        fill(0, 0, 0);
+                        break;
+                    case "hljs-function":
+                        fill(255, 100, 0);
+                        break;
+                    case "hljs-comment":
+                        fill(100, 255, 0);
+                        break;
+                    case "hljs-symbol":
+                        fill(0, 255, 100);
+                        break;
+                    case "hljs-title":
+                        fill(0, 100, 255);
+                        break;
+                }
+                ellipse(5+i*w*wRate + w*wRate/2.0 + random(-10, 10), height/2.0+random(-10, 10), 10, 10);
+            });
         });
     }
+    pop();
+
+    push();
+    translate(playerX, playerY);
+    ellipse(0, 0, 10, 10);
+    if (keyIsDown(LEFT_ARROW)) playerX -= 1;
+    if (keyIsDown(RIGHT_ARROW)) playerX += 1;
+    if (keyIsDown(UP_ARROW)) playerY -= 1;
+    if (keyIsDown(DOWN_ARROW)) playerY += 1;
     pop();
 
     noStroke();
@@ -165,13 +259,13 @@ function draw() {
     rect(0, 0, 200, 120);
 }
 
+function isInBox(x, y, x1, x2, y1, y2) {
+    return x>x1 && x<x2 && y>y1 && y<y2;
+}
+
 function mouseDragged() {
     if (isStarted) return;
     if (!(isInBox(mouseX, mouseY, 0, width, 0, height))) return;
     if (isInBox(mouseX, mouseY, 0, 200, 0, 100)) return;
     stageScrollX -= pmouseX - mouseX;
-}
-
-function isInBox(x, y, x1, x2, y1, y2) {
-    return x>x1 && x<x2 && y>y1 && y<y2;
 }
