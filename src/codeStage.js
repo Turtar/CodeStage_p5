@@ -1,6 +1,4 @@
-// import anime from '../node_modules/animejs/lib/anime.es.js';
-
-const hljsKeywords = [
+const HLJS_KEYWORDS = [
     "hljs-keyword",
     "hljs-string",
     "hljs-class",
@@ -14,125 +12,160 @@ const hljsKeywords = [
     "hljs-symbol",
     "hljs-title",
 ]
-
-let sentenceParamsTop = [], sentenceParamsBottom = [];
+let sentenceParamsTop = []; sentenceParamsBottom = [];
 let isTopReversed = true, isStarted = false;
-let topWSlider, topHSlider;
-let bottomWSlider, bottomHSlider;
+let topWSlider, topHSlider, bottomWSlider, bottomHSlider;
 let startButton;
 let stageScrollX = 0;
 let playerX = playerY = 0;
+let enemyParams = [];
 
-let createParamsJson = (file, codeContainer, sentenceParams, isTop) => {
-    if (file===null) return;
-    let fileReader = new FileReader();
-    fileReader.onload = () => {
-        const code = fileReader.result;
-        codeContainer.innerHTML = hljs.highlightAuto(code).value;
-
-        const sentenceArray = codeContainer.innerText.split(/\r\n|\r|\n/);
-        const lengthArray = sentenceArray.map((x)=>x.length);
-
-        htmlArray = codeContainer.innerHTML.split(/\r\n|\r|\n/);
-        const keywordArray = htmlArray.map((row)=>{
-            resArray = [];
-            hljsKeywords.map((key)=>{
-                if (row.match(key)) {
-                    resArray.push(key);
-                }
-            });
-            return resArray;
-        });
-
-        // JSONの作成
-        let len = sentenceArray.length;
-        for(let i=0; i<len; i++){
-            sentenceParams.push({
-                length: lengthArray[i],
-                hljsKeywords: keywordArray[i],
-            });
-        }
-
-        const stagePart = isTop ? "top" : "bottom";
-        const stageHeight = isTop ? -(10+document.getElementById("code-stage-top").offsetHeight) : 600;
-        anime.timeline()
-            .add({
-                targets: `#code-stage-${stagePart}`,
-                translateY: stageHeight,
-                rotate: isTop ? {
-                    value: 90,
-                    duration: 1000,
-                    easing: 'cubicBezier(0, 0, 0.58, 1.0)',
-                } : {
-                    value: -90,
-                    duration: 1000,
-                    easing: 'cubicBezier(0, 0, 0.58, 1.0)',
-                },
-            })
-            .add({
-                targets: `#code-stage-${stagePart}`,
-                opacity: 0,
-                delay: 100,
-                duration: 5000,
-                easing: 'easeOutSine',
-            })
-            .add({
-                targets: `#code-stage-${stagePart}`,
-                zIndex: -100,
-                delay: 150,
-            });
-    }
-    fileReader.readAsText(file);
-}
 
 function setup() {
+    const createSentenceParams = (file, codeContainer, sentenceParams, isTop) => {
+        if (file===null) return;
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+            codeContainer.innerHTML = hljs.highlightAuto(fileReader.result).value;
+
+            // JSONの作成
+            const keywordArray = codeContainer.innerHTML.split(/\r\n|\r|\n/).map((row)=>{
+                resArray = [];
+                HLJS_KEYWORDS.map((key) => {
+                    if (row.match(key)) {
+                        resArray.push(key);
+                    }
+                });
+                return resArray;
+            });
+            const sentenceArray = codeContainer.innerText.split(/\r\n|\r|\n/);
+            for(let i=0; i<sentenceArray.length; i++){
+                sentenceParams.push({
+                    length: sentenceArray[i].length,
+                    hljsKeywords: keywordArray[i],
+                });
+            }
+
+            
+            const stagePart = isTop ? "top" : "bottom";
+            const stageHeight = isTop ? -(10+document.getElementById("code-stage-top").offsetHeight) : 600;
+            anime.timeline()
+                .add({
+                    targets: `#code-stage-${stagePart}`,
+                    translateY: stageHeight,
+                    rotate: isTop ? {
+                        value: 90,
+                        duration: 1000,
+                        easing: 'cubicBezier(0, 0, 0.58, 1.0)',
+                    } : {
+                        value: -90,
+                        duration: 1000,
+                        easing: 'cubicBezier(0, 0, 0.58, 1.0)',
+                    },
+                })
+                .add({
+                    targets: `#code-stage-${stagePart}`,
+                    opacity: 0,
+                    delay: 100,
+                    duration: 5000,
+                    easing: 'easeOutSine',
+                })
+                .add({
+                    targets: `#code-stage-${stagePart}`,
+                    zIndex: -100,
+                    delay: 150,
+                });
+        }
+        fileReader.readAsText(file);
+    }
+
+    const setupStageMaker = () => {
+
+        document.getElementById("code-stage-top").style.zIndex = -1000;
+        document.getElementById("code-stage-bottom").style.zIndex = -1000;
+
+        let topFiles, bottomFiles;
+        select('#file-selector-top').elt.onchange = (ev) => topFiles = ev.currentTarget.files;
+        select('#file-selector-bottom').elt.onchange = (ev) => bottomFiles = ev.currentTarget.files;
+        select('#highlight-button').elt.onclick = () => {
+            if (topFiles) {
+                const codeContainerTop = document.getElementById("code-container-top");
+                createSentenceParams(topFiles[0], codeContainerTop, sentenceParamsTop, true);
+                document.getElementById("code-stage-top").style.zIndex = 0;
+            }
+            if (bottomFiles) {
+                const codeContainerBottom = document.getElementById("code-container-bottom");
+                createSentenceParams(bottomFiles[0], codeContainerBottom, sentenceParamsBottom, false);
+                document.getElementById("code-stage-bottom").style.zIndex = 0;
+            }
+        };
+    }
+
+    const setupGUI = () => {
+        topWSlider = createSlider(0, 300, 83);
+        topWSlider.position(20, 140);
+        topHSlider = createSlider(0, 300, 70);
+        topHSlider.position(20, 160);
+        bottomWSlider = createSlider(0, 300, 83);
+        bottomWSlider.position(20, 180);
+        bottomHSlider = createSlider(0, 300, 70);
+        bottomHSlider.position(20, 200);
+        startButton = createButton('Play Game');
+        startButton.position(20, 230);
+        startButton.mousePressed(() => {
+            stageScrollX = 0;
+            isStarted = true;
+        });
+    }
+
+    const setupGameObjects = () => {
+        playerX = 10.0;
+        playerY = height/2.0;
+        colorMode(HSB, 360, 100, 100, 100);
+    }
+
     let canvas = createCanvas(1000, 600);
     canvas.parent('#sketch-container');
-    topWSlider = createSlider(0, 300, 83);
-    topWSlider.position(20, 140);
-    topHSlider = createSlider(0, 300, 70);
-    topHSlider.position(20, 160);
-    bottomWSlider = createSlider(0, 300, 83);
-    bottomWSlider.position(20, 180);
-    bottomHSlider = createSlider(0, 300, 70);
-    bottomHSlider.position(20, 200);
-    startButton = createButton('Play Game');
-    startButton.position(20, 230);
-    startButton.mousePressed(() => {
-        stageScrollX = 0;
-        isStarted = true;
-    });
-    playerX = 10.0;
-    playerY = height/2.0;
-    
-    document.getElementById("code-stage-top").style.zIndex = -10;
-    document.getElementById("code-stage-bottom").style.zIndex = -10;
-
-    let topFiles;
-    select('#file-selector-top').elt.onchange = (ev) => topFiles = ev.currentTarget.files;
-    let bottomFiles;
-    select('#file-selector-bottom').elt.onchange = (ev) => bottomFiles = ev.currentTarget.files;
-    select('#highlight-button').elt.onclick = () => {
-        if (topFiles) {
-            const codeContainerTop = document.getElementById("code-container-top");
-            createParamsJson(topFiles[0], codeContainerTop, sentenceParamsTop, true);
-            document.getElementById("code-stage-top").style.zIndex = 0;
-        }
-        if (bottomFiles) {
-            const codeContainerBottom = document.getElementById("code-container-bottom");
-            createParamsJson(bottomFiles[0], codeContainerBottom, sentenceParamsBottom, false);
-            document.getElementById("code-stage-bottom").style.zIndex = 0;
-        }
-    };
+    window.addEventListener('keydown', (event) => event.preventDefault());
+     
+    setupStageMaker();
+    setupGUI();
+    setupGameObjects();
 }
 
 function draw() {
-    if (sentenceParamsTop.length>0 && isTopReversed) { 
+    if (sentenceParamsTop.length>0 && sentenceParamsBottom.length>0 && isTopReversed) { 
         sentenceParamsTop.reverse();
+        sentenceParamsTop.forEach((v, i) => {
+            v.hljsKeywords.forEach((type) => {
+                enemyParams.push({
+                    stage: "top",
+                    index: i,
+                    type: type,
+                    pos: {
+                        x: random(-50, 50),
+                        y: random(-200, 200),
+                    },
+                });
+            });
+        });
+        sentenceParamsBottom.forEach((v, i) => {
+            v.hljsKeywords.forEach((type) => {
+                enemyParams.push({
+                    stage: "bottom",
+                    index: i,
+                    tyle: type,
+                    pos: {
+                        x: random(-50, 50),
+                        y: random(-200, 200),
+                    },
+                });
+            });
+        });
         isTopReversed = false;
     }
 
-    background(200);
+    background('#C4A381');
 
     push();
     if (!isStarted) {
@@ -141,106 +174,55 @@ function draw() {
         translate(stageScrollX, 0);
         stageScrollX -= 1;
     }
-    if (sentenceParamsTop) {
-        sentenceParamsTop.forEach((v, i) => {
-            const w = 18, h = 7;
-            const wRate = topWSlider.value()*0.01, hRate = topHSlider.value()*0.01;
-            noStroke();
-            fill('#CF9848');
-            rect(5+i*w*wRate, 1, w*wRate, h*v.length*hRate);
-            v.hljsKeywords.forEach((item) => {
-                switch (item) {
-                    case "hljs-keyword":
-                        fill(255, 0, 0);
-                        break;
-                    case "hljs-string":
-                        fill(0, 255, 0);
-                        break;
-                    case "hljs-class":
-                        fill(0, 0, 255);
-                        break;
-                    case "hljs-attr":
-                        fill(255, 255, 0);
-                        break;
-                    case "hljs-literal":
-                        fill(255, 0, 255);
-                        break;
-                    case "hljs-built_in":
-                        fill(0, 255, 255);
-                        break;
-                    case "hljs-meta":
-                        fill(255, 255, 255);
-                        break;
-                    case "hljs-number":
-                        fill(0, 0, 0);
-                        break;
-                    case "hljs-function":
-                        fill(255, 100, 0);
-                        break;
-                    case "hljs-comment":
-                        fill(100, 255, 0);
-                        break;
-                    case "hljs-symbol":
-                        fill(0, 255, 100);
-                        break;
-                    case "hljs-title":
-                        fill(0, 100, 255);
-                        break;
-                }
-                ellipse(5+i*w*wRate + w*wRate/2.0 + random(-10, 10), height/2.0+random(-10, 10), 10, 10);
-            });
 
-        });
+    if (sentenceParamsTop.length>0) {
+        const barW = 18 * topWSlider.value()*0.01;
+        const barH = 7 * topHSlider.value()*0.01;
+        const canvasWidth = 1000;
+
+        const drawnTopMin = Math.floor(-stageScrollX/barW) - 1;
+        const drawnTopMax = drawnTopMin + Math.floor(canvasWidth/barW) + 2;
+
+        for (let i=drawnTopMin; i<=drawnTopMax; i++) {
+            if (i>=sentenceParamsTop.length) break;
+            if (i<0) continue;
+            const v = sentenceParamsTop[i];
+            noStroke();
+            fill('#874E30');
+            rect(5+i*barW, 1, barW, barH*v.length);
+            // v.hljsKeywords.forEach((item) => {
+            //     fill(360.0 / (1+HLJS_KEYWORDS.indexOf(item)), 100, 100);
+            //     ellipse(5+i*barW + barW/2.0 + random(-10, 10), height/2.0+random(-10, 10), 10, 10);
+            // });
+        }
+    }
+    if (sentenceParamsBottom.length>0) {
+        const barW = 18 * bottomWSlider.value()*0.01;
+        const barH = -7 * bottomHSlider.value()*0.01;
+        const canvasWidth = 1000;
+
+        const drawnBottomMin = Math.floor(-stageScrollX/barW) - 1;
+        const drawnBottomMax = drawnBottomMin + Math.floor(canvasWidth/barW) + 2;
+
+        for (let i=drawnBottomMin; i<=drawnBottomMax; i++) {
+            if (i>=sentenceParamsBottom.length) break;
+            if (i<0) continue;
+            const v = sentenceParamsBottom[i];
+            noStroke();
+            fill('#874E30');
+            rect(7+i*barW, height-1, barW, barH*v.length);
+            // v.hljsKeywords.forEach((item) => {
+            //     fill(360.0 / (1+HLJS_KEYWORDS.indexOf(item)), 100, 100);
+            //     ellipse(5+i*barW + barW/2.0 + random(-10, 10), height/2.0+random(-10, 10), 10, 10);
+            // });
+        }
     }
 
-    if (sentenceParamsBottom) {
-        sentenceParamsBottom.forEach((v, i) => {
-            const w = 18, h = -7;
-            const wRate = bottomWSlider.value()*0.01, hRate = bottomHSlider.value()*0.01;
-            noStroke();
-            fill('#CF9848');
-            rect(7+i*w*wRate, height-1, w*wRate, h*v.length*hRate);
-            v.hljsKeywords.forEach((item) => {
-                switch (item) {
-                    case "hljs-keyword":
-                        fill(255, 0, 0);
-                        break;
-                    case "hljs-string":
-                        fill(0, 255, 0);
-                        break;
-                    case "hljs-class":
-                        fill(0, 0, 255);
-                        break;
-                    case "hljs-attr":
-                        fill(255, 255, 0);
-                        break;
-                    case "hljs-literal":
-                        fill(255, 0, 255);
-                        break;
-                    case "hljs-built_in":
-                        fill(0, 255, 255);
-                        break;
-                    case "hljs-meta":
-                        fill(255, 255, 255);
-                        break;
-                    case "hljs-number":
-                        fill(0, 0, 0);
-                        break;
-                    case "hljs-function":
-                        fill(255, 100, 0);
-                        break;
-                    case "hljs-comment":
-                        fill(100, 255, 0);
-                        break;
-                    case "hljs-symbol":
-                        fill(0, 255, 100);
-                        break;
-                    case "hljs-title":
-                        fill(0, 100, 255);
-                        break;
-                }
-                ellipse(5+i*w*wRate + w*wRate/2.0 + random(-10, 10), height/2.0+random(-10, 10), 10, 10);
-            });
+    if (enemyParams.length>0) {
+        enemyParams.forEach((v) => {
+            const barW = v.stage==="top" ? 18 * topWSlider.value() * 0.01 : 18 * bottomWSlider.value() * 0.01;
+            fill(360.0 / (1+HLJS_KEYWORDS.indexOf(v.type)), 100, 100);
+            ellipse(5+v.index*barW + barW/2.0 + v.pos.x, height/2.0+v.pos.y, 10, 10);
         });
     }
     pop();
@@ -255,7 +237,7 @@ function draw() {
     pop();
 
     noStroke();
-    fill(0, 100);
+    fill(0, 0, 0, 50);
     rect(0, 0, 200, 120);
 }
 
