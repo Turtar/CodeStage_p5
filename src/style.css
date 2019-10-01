@@ -1,33 +1,68 @@
-#code-stage {
-    width: 800px;
+#code-stage-top {
+    position: absolute;
+    width: 600px;
+    transform-origin: left bottom;
+    /* z-index: -1; */
+}
 
+#code-stage-bottom {
+    position: absolute;
+    width: 600px;
+    transform-origin: left top;
+    /* z-index: -1; */
 }
 
 .highlight-data {
     display: none;
 }
-
+/* 
 .top-active {
     -webkit-transition: 1s;
 	-moz-transition: 1s;
 	-o-transition: 1s;
     transition: 1s cubic-bezier(0, 0, 0.58, 1.0);
 
-	transform-origin: left bottom;
     transform: 
         translateY(-2000px)
         rotate(-270deg);
 }
 
-.bottom-active {
-    -webkit-transition: 1s;
-	-moz-transition: 1s;
-	-o-transition: 1s;
-    transition: 1s cubic-bezier(0, 0, 0.58, 1.0);
+.bottom-active {/*
+    /* transition: 1s cubic-bezier(0, 0, 0.58, 1.0);
+    transform:
+        translateY(100px); */
+    /*animation:
+        rotate 1s cubic-bezier(0, 0, 0.58, 1.0) 0s forwards,
+        fade 2s cubic-bezier(0, 0, 0.58, 1.0) 1s forwards;
+}
 
-	transform-origin: left top;
-    transform: 
-        /* translateY(-1000px) */
-        translateY(800px)
-        rotate(-90deg);
+@keyframes hoge {
+    0% {width: 100px;}
+    100% {width: 0px;}
+}
+
+@keyframes rotate {
+    0% {
+        transform:
+            translateY(0px)
+            rotate(0deg);
+    }
+    100% {
+        transform:
+            translateY(800px)
+            rotate(-90deg);
+    }
+}
+
+@keyframes fade {
+    from { opacity: 1; }
+    to { opacity: 0.5; }
+} */
+
+#defaultCanvas0 {
+    /* position: absolute; */
+    /* top: 140px; */
+    /* left: 8px; */
+    z-index: -2;
+    /* opacity: 0; */
 }

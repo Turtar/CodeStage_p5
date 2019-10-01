@@ -1,31 +1,54 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Code Stage</title>
-    <link rel="stylesheet" href="./src/style.css">
-    <link rel="stylesheet" href="./src/highlight/styles/tomorrow-night.css">
-</head>
-<body>
+    <link rel="stylesheet" href="./src/style.css" />
+    <!-- <link rel="stylesheet" href="./src/highlight/styles/tomorrow-night.css" /> -->
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/tomorrow-night.min.css"
+    />
+  </head>
+  <body>
     <!-- <input id="file-selector" type="file"/>
     <input id="highlight-button" type="button" value="ハイライト" />
     <div id="test-container"></div>
     <pre><code id="test-precode"></code></pre>
     <pre id="code-stage"><code id="code-container"></code></pre> -->
 
-
-    <div id='sketch-container'>
-        <input id='file-selector' type='file' />
-        <input id='highlight-button' type='button' value='ハイライト' />
-        <pre id='code-stage'><code id='code-container'></code></pre>
+    <div id="sketch-container">
+      <p>
+        ステージ上部
+        <input id="file-selector-top" type="file" />
+      </p>
+      <p>
+        ステージ下部
+        <input id="file-selector-bottom" type="file" />
+      </p>
+      <p>
+        <input id="highlight-button" type="button" value="登録" />
+      </p>
+      <pre
+        id="code-stage-bottom"
+        style="font-size: 10px;"
+      ><code id='code-container-bottom'></code></pre>
+      <pre
+        id="code-stage-top"
+        style="font-size: 10px;"
+      ><code id='code-container-top'></code></pre>
     </div>
 
     <script src="./src/p5.js"></script>
     <script src="./src/p5.dom.js"></script>
-    <script src="./src/highlight/highlight.pack.js"></script>
-    <script src="src/codeStage.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-</body>
+    <!-- <script src="./src/highlight/highlight.pack.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script src="./src/anime/lib/anime.min.js"></script>
+    <script src="./src/codeStage.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
 </html>
