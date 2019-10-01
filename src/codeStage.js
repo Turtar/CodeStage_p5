@@ -168,12 +168,8 @@ function draw() {
     background('#C4A381');
 
     push();
-    if (!isStarted) {
-        translate(stageScrollX, 0);
-    } else {
-        translate(stageScrollX, 0);
-        stageScrollX -= 1;
-    }
+    translate(stageScrollX, 0);
+    if (isStarted) stageScrollX -= 1;
 
     if (sentenceParamsTop.length>0) {
         const barW = 18 * topWSlider.value()*0.01;
@@ -229,16 +225,31 @@ function draw() {
 
     push();
     translate(playerX, playerY);
-    ellipse(0, 0, 10, 10);
+    ellipse(0, 0, 30, 30);
     if (keyIsDown(LEFT_ARROW)) playerX -= 1;
     if (keyIsDown(RIGHT_ARROW)) playerX += 1;
     if (keyIsDown(UP_ARROW)) playerY -= 1;
     if (keyIsDown(DOWN_ARROW)) playerY += 1;
     pop();
 
+
+
+    // 調整バーの背景
     noStroke();
     fill(0, 0, 0, 50);
     rect(0, 0, 200, 120);
+
+    // if (enemyParams.length>0) {
+    //     enemyParams.find((v) => {
+    //         const barW = v.stage==="top" ? 18 * topWSlider.value() * 0.01 : 18 * bottomWSlider.value() * 0.01;
+    //         const enemyX = 5+v.index*barW + barW/2.0 + v.pos.x;
+    //         const enemyY = height/2.0+v.pos.y;
+    //         if (dist(playerX, playerY, enemyX, enemyY)) {
+    //             return true;
+    //         }
+    //     });
+
+    // }
 }
 
 function isInBox(x, y, x1, x2, y1, y2) {
