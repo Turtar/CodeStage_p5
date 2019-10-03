@@ -22,31 +22,32 @@
     <div id="sketch-container">
       <p>
         ステージ上部
-        <input id="file-selector-top" type="file" />
+        <input id="top-file-selector" type="file" />
       </p>
       <p>
         ステージ下部
-        <input id="file-selector-bottom" type="file" />
+        <input id="bottom-file-selector" type="file" />
       </p>
       <p>
-        <input id="highlight-button" type="button" value="登録" />
+        <input id="add-top" type="button" value="add top" />
+        <input id="add-bottom" type="button" value="add bottom" />
       </p>
       <pre
-        id="code-stage-bottom"
+        id="bottom-stage"
         style="font-size: 10px;"
-      ><code id='code-container-bottom'></code></pre>
+      ><code id='bottom-container'></code></pre>
       <pre
-        id="code-stage-top"
+        id="top-stage"
         style="font-size: 10px;"
-      ><code id='code-container-top'></code></pre>
+      ><code id='top-container'></code></pre>
     </div>
 
-    <script src="./src/p5.js"></script>
-    <script src="./src/p5.dom.js"></script>
+    <script src="./src/p5/p5.js"></script>
+    <script src="./src/p5/p5.dom.js"></script>
     <!-- <script src="./src/highlight/highlight.pack.js"></script> -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
     <script src="./src/anime/lib/anime.min.js"></script>
-    <script src="./src/codeStage.js"></script>
+    <script type="module" src="./src/codeStage_.js"></script>
     <script>
       hljs.initHighlightingOnLoad();
     </script>

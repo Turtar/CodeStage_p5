@@ -1,11 +1,15 @@
-#code-stage-top {
+body {
+    background-color: rgb(216, 216, 216);
+}
+
+#top-stage {
     position: absolute;
     width: 600px;
     transform-origin: left bottom;
     /* z-index: -1; */
 }
 
-#code-stage-bottom {
+#bottom-stage {
     position: absolute;
     width: 600px;
     transform-origin: left top;
