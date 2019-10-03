@@ -1,3 +1,4 @@
+import {ProcessCode} from "./class/ProcessCode.js";
 import {Stage} from "./class/Stage.js";
 import {Player} from "./class/Player.js";
 import {Enemy} from "./class/Enemy.js";
@@ -9,7 +10,7 @@ let player = new Player();
 let enemies = []; // Array(Enemy)
 
 function init() {
-    stage.init();
+    processCode.init();
 }
 
 let main = function(p) {
