@@ -39,6 +39,7 @@ function _pushEnemy(isTop) {
     console.log(enemies);
 }
 
+// メインウィンドウ
 let main = function(p) {
     let editGUI = new EditGUI();
 
@@ -61,6 +62,7 @@ let main = function(p) {
     }
 }
 
+// ミニマップ
 let miniMap = (p) => {
     p.setup = () => {
         p.createCanvas(300, 300);
