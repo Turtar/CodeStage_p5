@@ -1,15 +1,3 @@
-/* 
-stageParams = {
-    top: [{ length, sentence, hljsKeywords }], 
-    bottom: [{ length, sentence, hljsKeywords }]
-}
-
-enemyParams = {
-    top: [{ index, type, pos: {x, y} }], 
-    bottom: [{ index, type, pos: {x, y} }]
-}
-*/
-
 const HLJS_KEYWORDS = [
     "hljs-keyword",
     "hljs-string",
@@ -25,6 +13,18 @@ const HLJS_KEYWORDS = [
     "hljs-title",
 ]
 
+/* 
+stageParams = {
+    top: [{ length, sentence, hljsKeywords }], 
+    bottom: [{ length, sentence, hljsKeywords }]
+}
+
+enemyParams = {
+    top: [{ index, type, pos: {x, y} }], 
+    bottom: [{ index, type, pos: {x, y} }]
+}
+*/
+
 export class ProcessCode {
     constructor() {
         this.stageParams = {
@@ -37,7 +37,7 @@ export class ProcessCode {
         };
     }
 
-    _addStageParams(file, isTop) {
+    addStageParams(file, isTop) {
         if (file===null) return;
         const containerId = isTop ? "top-container" : "bottom-container";
         const codeContainer = document.getElementById(containerId);
@@ -88,27 +88,5 @@ export class ProcessCode {
             }
         }
         fileReader.readAsText(file);
-    }
-
-    _setupFileListener() {
-        // document.getElementById("top-stage").style.zIndex = -1000;
-        let topFiles = [];
-        $("#top-file-selector").change((ev) => topFiles = ev.currentTarget.files);
-        $("#add-top").click(() => {
-            this._addStageParams(topFiles[0], true);
-            // document.getElementById("top-stage").style.zIndex = 0;
-        });
-
-        // document.getElementById("bottom-stage").style.zIndex = -1000;
-        let bottomFiles = [];
-        $("#bottom-file-selector").change((ev) => bottomFiles = ev.currentTarget.files);
-        $("#add-bottom").click(() => {
-            this._addStageParams(bottomFiles[0], false);
-            // document.getElementById("bottom-stage").style.zIndex = 0;
-        });
-    }
-
-    init() {
-        this._setupFileListener();
     }
 }

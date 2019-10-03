@@ -8,9 +8,35 @@ let stage = new Stage();
 let processCode = new ProcessCode();
 let player = new Player();
 let enemies = []; // Array(Enemy)
+let topEnemyNum = 0, bottomEnemyNum = 0;
 
-function init() {
-    processCode.init();
+function setupFileListener() {
+    // document.getElementById("top-stage").style.zIndex = -1000;
+    let topFiles = [];
+    $("#top-file-selector").change((ev) => topFiles = ev.currentTarget.files);
+    $("#add-top").click(() => {
+        processCode.addStageParams(topFiles[0], true);
+        // document.getElementById("top-stage").style.zIndex = 0;
+    });
+
+    // document.getElementById("bottom-stage").style.zIndex = -1000;
+    let bottomFiles = [];
+    $("#bottom-file-selector").change((ev) => bottomFiles = ev.currentTarget.files);
+    $("#add-bottom").click(() => {
+        processCode.addStageParams(bottomFiles[0], false);
+        // document.getElementById("bottom-stage").style.zIndex = 0;
+    });
+}
+
+function _pushEnemy(isTop) {
+    const epArr = isTop ? processCode.enemyParams.top : processCode.enemyParams.bottom;
+    const startNum = isTop ? topEnemyNum : bottomEnemyNum;
+    for (let i=startNum; i<epArr.length; i++) {
+        enemies.push(new Enemy(isTop, epArr[i].index, epArr[i].type, epArr[i].x, epArr[i].y));
+    };
+    if (isTop) topEnemyNum = epArr.length;
+    else bottomEnemyNum = epArr.length;
+    console.log(enemies);
 }
 
 let main = function(p) {
@@ -23,9 +49,11 @@ let main = function(p) {
     }
 
     p.draw = () => {
+        if (processCode.enemyParams.top.length>topEnemyNum) _pushEnemy(true);
+        if (processCode.enemyParams.bottom.length>bottomEnemyNum) _pushEnemy(false);
 
         p.background(100);
-        stage.drawMain(p, processCode.sentenceParams);
+        stage.drawMain(p, processCode.stageParams);
         player.drawMain(p);
         enemies.forEach((enemy) => {
             enemy.draw(p);
@@ -45,6 +73,6 @@ let miniMap = (p) => {
     }
 }
 
-init();
+setupFileListener();
 new p5(main, "mainContainer");
 new p5(miniMap, "miniMapContainer");
