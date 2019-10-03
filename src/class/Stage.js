@@ -8,7 +8,6 @@ export class Stage {
     }
 
     drawMain(p, sentenceParams) {
-        if (sentenceParams)
     }
 
     drawMiniMap() {
