@@ -36,7 +36,6 @@ function _pushEnemy(isTop) {
     };
     if (isTop) topEnemyNum = epArr.length;
     else bottomEnemyNum = epArr.length;
-    console.log(enemies);
 }
 
 // メインウィンドウ
