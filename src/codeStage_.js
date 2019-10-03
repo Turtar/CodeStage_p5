@@ -3,12 +3,12 @@ import {Player} from "./class/Player.js";
 import {Enemy} from "./class/Enemy.js";
 import { EditGUI } from "./class/EditGUI.js";
 
-let stage;
+let stage = new Stage();
+let processCode = new ProcessCode();
 let player = new Player();
 let enemies = []; // Array(Enemy)
 
 function init() {
-    stage = new Stage();
     stage.init();
 }
 
