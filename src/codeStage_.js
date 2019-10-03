@@ -23,8 +23,9 @@ let main = function(p) {
     }
 
     p.draw = () => {
+
         p.background(100);
-        stage.drawMain(p);
+        stage.drawMain(p, processCode.sentenceParams);
         player.drawMain(p);
         enemies.forEach((enemy) => {
             enemy.draw(p);

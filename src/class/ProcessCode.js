@@ -1,3 +1,15 @@
+/* 
+stageParams = {
+    top: [{ length, sentence, hljsKeywords }], 
+    bottom: [{ length, sentence, hljsKeywords }]
+}
+
+enemyParams = {
+    top: [{ index, type, pos: {x, y} }], 
+    bottom: [{ index, type, pos: {x, y} }]
+}
+*/
+
 const HLJS_KEYWORDS = [
     "hljs-keyword",
     "hljs-string",
@@ -15,7 +27,11 @@ const HLJS_KEYWORDS = [
 
 export class ProcessCode {
     constructor() {
-        this.sentenceParams = {
+        this.stageParams = {
+            top: [],
+            bottom: [],
+        };
+        this.enemyParams = {
             top: [],
             bottom: [],
         };
@@ -42,20 +58,34 @@ export class ProcessCode {
             });
 
             // sentenceParamsに文字長、キーワードリストを登録
+            let spArr = [], epArr = [];
             const sentenceArray = codeContainer.innerText.split(/\r\n|\r|\n/);
-            sentenceArray.forEach((v, i) => {
-                if (isTop) {
-                    this.sentenceParams.top.push({
-                        length: v.length,
-                        hljsKeywords: keywordArray[i],
+            sentenceArray.forEach((senVal, senId) => {
+                spArr.push({
+                    length: senVal.length,
+                    sentence: senVal,
+                    hljsKeywords: keywordArray[senId],
+                });
+   
+                keywordArray[senId].forEach((keyVal) => {
+                    epArr.push({
+                        index: senId,
+                        type: keyVal,
+                        pos: {
+                            x: 0,
+                            y: 0,
+                        }
                     });
-                } else {
-                    this.sentenceParams.bottom.push({
-                        length: v.length,
-                        hljsKeywords: keywordArray[i],
-                    });
-                }
+                });
             });
+
+            if (isTop) {
+                this.stageParams.top = this.stageParams.top.concat(spArr);
+                this.enemyParams.top = this.enemyParams.top.concat(epArr);
+            } else {
+                this.stageParams.bottom = this.stageParams.bottom.concat(spArr);
+                this.enemyParams.bottom = this.enemyParams.bottom.concat(epArr);
+            }
         }
         fileReader.readAsText(file);
     }
@@ -64,18 +94,18 @@ export class ProcessCode {
         // document.getElementById("top-stage").style.zIndex = -1000;
         let topFiles = [];
         $("#top-file-selector").change((ev) => topFiles = ev.currentTarget.files);
-        document.getElementById("add-top").onclick = () => {
+        $("#add-top").click(() => {
             this._addStageParams(topFiles[0], true);
             // document.getElementById("top-stage").style.zIndex = 0;
-        }
+        });
 
         // document.getElementById("bottom-stage").style.zIndex = -1000;
         let bottomFiles = [];
         $("#bottom-file-selector").change((ev) => bottomFiles = ev.currentTarget.files);
-        document.getElementById("add-bottom").onclick = () => {
+        $("#add-bottom").click(() => {
             this._addStageParams(bottomFiles[0], false);
             // document.getElementById("bottom-stage").style.zIndex = 0;
-        }
+        });
     }
 
     init() {

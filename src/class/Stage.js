@@ -7,8 +7,8 @@ export class Stage {
         // ステージ描画
     }
 
-    drawMain() {
-
+    drawMain(p, sentenceParams) {
+        if (sentenceParams)
     }
 
     drawMiniMap() {
