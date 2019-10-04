@@ -15,28 +15,28 @@
     <div id="sketch-container">
       <div>
         <div id="selector-container">
-          <p id="top-selector">
-            ステージ上部
+          <div id="top-selector">
+            <label class="selector-text">> Stage Top</label>
             <input id="top-file-selector" type="file" />
-            <input id="add-top" type="button" value="生成" />
-          </p>
-          <p id="bottom-selector">
-            ステージ下部
+            <input id="add-top" class="add-button" type="button" value="Add Top" />
+          </div>
+          <div id="bottom-selector">
+            <span class="selector-text">> Stage Bottom</span>
             <input id="bottom-file-selector" type="file" />
-            <input id="add-bottom" type="button" value="生成" />
-          </p>
+            <input id="add-bottom" class="add-button" type="button" value="Add Bottom" />
+          </div>
         </div>
       </div>
 
       <div id="mini-map-container"></div>
-      <div id="main-container"></div>
-
-      <pre id="bottom-stage" style="font-size: 10px;">
-        <code id='bottom-container'></code>
-      </pre>
-      <pre id="top-stage" style="font-size: 10px;">
-        <code id='top-container'></code>
-      </pre>
+      <div id="main-container">
+        <pre id="bottom-stage" style="font-size: 10px;">
+          <code id='bottom-container'></code>
+        </pre>
+        <pre id="top-stage" style="font-size: 10px;">
+          <code id='top-container'></code>
+        </pre>
+      </div>
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

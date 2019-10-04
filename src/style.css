@@ -2,6 +2,24 @@ body {
   background-color: rgb(216, 216, 216);
 }
 
+#top-selector {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#bottom-selector {
+    margin-bottom: 20px;
+}
+
+.selector-text {
+    display: inline-block;
+    width: 140px;
+}
+
+.add-button {
+    width: 80px;
+}
+
 #top-stage {
   position: absolute;
   width: 600px;
@@ -16,16 +34,8 @@ body {
   /* z-index: -1; */
 }
 
-.highlight-data {
-  display: none;
-}
-
 #defaultCanvas0 {
-  /* position: absolute; */
-  /* top: 140px; */
-  /* left: 8px; */
   z-index: -2;
-  /* opacity: 0; */
 }
 
 #mini-map-container {
