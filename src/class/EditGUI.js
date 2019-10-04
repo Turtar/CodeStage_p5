@@ -1,7 +1,7 @@
 export class EditGUI {
     constructor() {
-        this.x = 20;
-        this.y = 140;
+        this.x = 15;
+        this.y = 5;
         this.w = 300;
         this.topWSlider;
         this.topHSlider;
@@ -9,11 +9,13 @@ export class EditGUI {
         this.bottomHSlider;
         this.startButton;
         this.isStarted = false;
+        this.sliderIsChanged = true;
     }
     
     init(p) {
         const setSlider = (min, max, initialValue, x, y) => {
             const slider = p.createSlider(min, max, initialValue);
+            slider.changed(() => this.sliderIsChanged = true);
             slider.position(x, y);
             return slider;
         }
@@ -28,5 +30,23 @@ export class EditGUI {
             this.stageScrollX = 0;
             this.isStarted = true;
         });
+    }
+
+    drawBackground(p) {
+        p.fill(50, 230);
+        p.rect(0, 0, 165, 130);
+    }
+
+    get sliderValues() {
+        return {
+            top: {
+                w: this.topWSlider.value(),
+                h: this.topHSlider.value(),
+            },
+            bottom: {
+                w: this.bottomWSlider.value(),
+                h: this.bottomHSlider.value(),
+            },
+        }
     }
 }
