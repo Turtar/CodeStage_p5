@@ -49,14 +49,14 @@ function setup() {
         });
       }
 
-      const stagePart = isTop ? 'top' : 'bottom';
+      const stagePart = isTop ? '#code-stage-top' : '#code-stage-bottom';
       const stageHeight = isTop
-        ? -(10 + document.getElementById('code-stage-top').offsetHeight)
+        ? -(10 + $('#code-stage-top').offsetHeight())
         : 600;
       anime
         .timeline()
         .add({
-          targets: `#code-stage-${stagePart}`,
+          targets: stagePart,
           translateY: stageHeight,
           rotate: isTop
             ? {
@@ -71,14 +71,14 @@ function setup() {
               }
         })
         .add({
-          targets: `#code-stage-${stagePart}`,
+          targets: stagePart,
           opacity: 0,
           delay: 100,
           duration: 5000,
           easing: 'easeOutSine'
         })
         .add({
-          targets: `#code-stage-${stagePart}`,
+          targets: stagePart,
           zIndex: -100,
           delay: 150
         });

@@ -1,34 +1,30 @@
-import { ProcessCode } from './class/ProcessCode.js';
-import { Stage } from './class/Stage.js';
-import { Player } from './class/Player.js';
-import { Enemy } from './class/Enemy.js';
-import { EditGUI } from './class/EditGUI.js';
+import { ProcessCode } from './module/ProcessCode.js';
+import { Stage } from './module/Stage.js';
+import { Player } from './module/Player.js';
+import { Enemy } from './module/Enemy.js';
+import { EditGUI } from './module/EditGUI.js';
 
 let stage = new Stage();
 let processCode = new ProcessCode();
 let player = new Player();
 let enemies = []; // Array(Enemy)
-let topEnemyNum = 0,
-  bottomEnemyNum = 0;
+let topEnemyNum = 0, 
+    bottomEnemyNum = 0;
 let editGUI = new EditGUI();
 
 function setupFileListener() {
-  document.getElementById('top-stage').style.zIndex = -1000;
   let topFiles = [];
   $('#top-file-selector').change(ev => (topFiles = ev.currentTarget.files));
   $('#add-top').click(() => {
     processCode.addStageParams(topFiles[0], true);
-    document.getElementById('top-stage').style.zIndex = 0;
+    $('#top-stage').css("z-index", 1000);
   });
 
-  document.getElementById('bottom-stage').style.zIndex = -1000;
   let bottomFiles = [];
-  $('#bottom-file-selector').change(
-    ev => (bottomFiles = ev.currentTarget.files)
-  );
+  $('#bottom-file-selector').change(ev => (bottomFiles = ev.currentTarget.files));
   $('#add-bottom').click(() => {
     processCode.addStageParams(bottomFiles[0], false);
-    document.getElementById('bottom-stage').style.zIndex = 0;
+    $('#bottom-stage').css("z-index", 1000);
   });
 }
 
@@ -77,7 +73,6 @@ let miniMap = p => {
   p.draw = () => {
     p.background(20);
     if (editGUI.sliderIsChanged) {
-      console.log(true);
       stage.createMiniMap(p, processCode.stageParams, editGUI.sliderValues);
       editGUI.sliderIsChanged = false;
     }

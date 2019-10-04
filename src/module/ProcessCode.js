@@ -1,3 +1,5 @@
+import { codeAnime } from './AnimeFunc.js'
+
 const HLJS_KEYWORDS = [
   'hljs-keyword',
   'hljs-string',
@@ -89,6 +91,8 @@ export class ProcessCode {
         this.stageParams.bottom = this.stageParams.bottom.concat(spArr);
         this.enemyParams.bottom = this.enemyParams.bottom.concat(epArr);
       }
+
+      codeAnime(isTop);
     };
     fileReader.readAsText(file);
   }
