@@ -1,16 +1,14 @@
 export class Stage {
   constructor() {
     this.stageScrollX = 0;
-    this.isStarted = false;
     this.miniMap;
   }
 
   _drawMainOneSide(p, params, rates, isTop) {
+    if (params.length === 0) return;
+
     p.push();
     p.translate(this.stageScrollX, 0);
-    if (this.isStarted) this.stageScrollX -= 1;
-
-    if (params.length === 0) return;
     const barW = 18 * rates.w * 0.01;
     const barH = 7 * rates.h * 0.01 * (isTop ? 1 : -1);
     const canvasW = 1000;
@@ -26,9 +24,9 @@ export class Stage {
       p.noStroke();
       p.fill(150);
       p.rect(i * barW, isTop ? 1 : p.height - 1, barW, barH * v.length);
-
+      
       p.push();
-      p.translate(i * barW + 10, isTop ? 1 : p.height - 1);
+      p.translate(i * barW + 15, isTop ? 1 : p.height - 1);
       p.rotate(isTop ? p.PI / 2.0 : -p.PI / 2.0);
       p.scale(1, isTop ? -1 : 1);
       p.fill(30);

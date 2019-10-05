@@ -19,13 +19,13 @@ export function codeAnime(isTop) {
         .add({
             targets: stagePart,
             opacity: 0,
-            delay: 100,
-            duration: 5000,
+            delay: 10,
+            duration: 1000,
             easing: 'easeOutSine',
         })
         .add({
             targets: stagePart,
             zIndex: -100,
-            delay: 150,
+            // delay: 150,
         });
 }

@@ -2,18 +2,59 @@ import { codeAnime } from './AnimeFunc.js'
 
 const HLJS_KEYWORDS = [
   'hljs-keyword',
-  'hljs-string',
-  'hljs-class',
-  'hljs-attr',
   'hljs-literal',
-  'hljs-built_in',
-  'hljs-meta',
-  'hljs-number',
-  'hljs-function',
-  'hljs-comment',
   'hljs-symbol',
-  'hljs-title'
+  'hljs-name',
+
+  'hljs-link',
+  
+  'hljs-built_in',
+  'hljs-type',
+  
+  'hljs-number',
+  'hljs-class',
+  
+  'hljs-string',
+  'hljs-meta-string',
+  
+  'hljs-regexp',
+  'hljs-template-tag',
+  
+  'hljs-subst',  
+  'hljs-function',
+  'hljs-title',
+  'hljs-params',
+  'hljs-formula',
+  
+  'hljs-comment',
+  'hljs-quote',
+  
+  'hljs-doctag',
+  
+  'hljs-meta',
+  'hljs-meta-keyword',
+  'hljs-tag',
+  
+  'hljs-variable',
+  'hljs-template-variable',
+  
+  'hljs-attr',
+  'hljs-attribute',
+  'hljs-builtin-name',
+  
+  'hljs-selection',
+  
+  'hljs-bullet',
+  'hljs-selector-tag',
+  'hljs-selector-id',
+  'hljs-selector-class',
+  'hljs-selector-attr',
+  'hljs-selector-pseudo', 
 ];
+
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
 /* 
 stageParams = {
@@ -77,8 +118,8 @@ export class ProcessCode {
             index: senId,
             type: keyVal,
             pos: {
-              x: 0,
-              y: 0
+              x: getRandomArbitrary(-50, 50),
+              y: getRandomArbitrary(-200, 200),
             }
           });
         });

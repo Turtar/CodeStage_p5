@@ -11,12 +11,14 @@ let enemies = []; // Array(Enemy)
 let topEnemyNum = 0, 
     bottomEnemyNum = 0;
 let editGUI = new EditGUI();
+let needUpdate = true;
 
 function setupFileListener() {
   let topFiles = [];
   $('#top-file-selector').change(ev => (topFiles = ev.currentTarget.files));
   $('#add-top').click(() => {
     processCode.addStageParams(topFiles[0], true);
+    needUpdate = true;
     $('#top-stage').css("z-index", 1000);
   });
 
@@ -24,6 +26,7 @@ function setupFileListener() {
   $('#bottom-file-selector').change(ev => (bottomFiles = ev.currentTarget.files));
   $('#add-bottom').click(() => {
     processCode.addStageParams(bottomFiles[0], false);
+    needUpdate = true;
     $('#bottom-stage').css("z-index", 1000);
   });
 }
@@ -35,7 +38,7 @@ function _pushEnemy(isTop) {
   const startNum = isTop ? topEnemyNum : bottomEnemyNum;
   for (let i = startNum; i < epArr.length; i++) {
     enemies.push(
-      new Enemy(isTop, epArr[i].index, epArr[i].type, epArr[i].x, epArr[i].y)
+      new Enemy(isTop, epArr[i].index, epArr[i].type, epArr[i].pos.x, epArr[i].pos.y)
     );
   }
   if (isTop) topEnemyNum = epArr.length;
@@ -55,13 +58,26 @@ let main = p => {
       _pushEnemy(false);
 
     p.background(20);
-    stage.drawMain(p, processCode.stageParams, editGUI.sliderValues);
+    stage.drawMain(p, processCode.stageParams, editGUI.sliderValues, editGUI.isStarted);
     player.drawMain(p);
     enemies.forEach(enemy => {
-      enemy.draw(p);
+      enemy.draw(p, editGUI.sliderValues, stage.stageScrollX);
     });
-    editGUI.drawBackground(p);
+    if (!editGUI.isStarted) editGUI.drawBackground(p);
+    if (editGUI.isStarted) stage.stageScrollX -= 1;
+
   };
+
+  function _isInBox(x, y, x1, x2, y1, y2) {
+    return x > x1 && x < x2 && y > y1 && y < y2;
+  }
+  
+  p.mouseDragged = () => {
+    if (editGUI.isStarted) return;
+    if (!_isInBox(p.mouseX, p.mouseY, 0, p.width, 0, p.height)) return;
+    if (_isInBox(p.mouseX, p.mouseY, 0, 165, 0, 130)) return;
+    stage.stageScrollX -= p.pmouseX - p.mouseX;
+  }
 };
 
 // ミニマップ
@@ -72,9 +88,13 @@ let miniMap = p => {
 
   p.draw = () => {
     p.background(20);
-    if (editGUI.sliderIsChanged) {
+    
+    if (needUpdate) {
       stage.createMiniMap(p, processCode.stageParams, editGUI.sliderValues);
       editGUI.sliderIsChanged = false;
+      needUpdate = false;
+    } else {
+        needUpdate = editGUI.sliderIsChanged;
     }
     stage.drawMiniMap(p);
   };

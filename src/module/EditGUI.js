@@ -29,12 +29,19 @@ export class EditGUI {
     this.startButton.mousePressed(() => {
       this.stageScrollX = 0;
       this.isStarted = true;
+      this.topWSlider.hide();
+      this.topHSlider.hide();
+      this.bottomWSlider.hide();
+      this.bottomHSlider.hide();
+      this.startButton.hide();
     });
   }
 
   drawBackground(p) {
+    p.push();
     p.fill(50, 230);
     p.rect(0, 0, 165, 130);
+    p.pop();
   }
 
   get sliderValues() {
