@@ -38,7 +38,7 @@ function _pushEnemy(isTop) {
   const startNum = isTop ? topEnemyNum : bottomEnemyNum;
   for (let i = startNum; i < epArr.length; i++) {
     enemies.push(
-      new Enemy(isTop, epArr[i].index, epArr[i].type, epArr[i].pos.x, epArr[i].pos.y)
+      new Enemy(isTop, epArr[i].index, epArr[i].type, epArr[i].word, epArr[i].pos.x, epArr[i].pos.y)
     );
   }
   if (isTop) topEnemyNum = epArr.length;

@@ -94,9 +94,19 @@ export class ProcessCode {
         .split(/\r\n|\r|\n/)
         .map(row => {
           const resArray = [];
-          HLJS_KEYWORDS.forEach(key => {
+          HLJS_KEYWORDS.forEach(key => { 
             if (row.match(key)) {
-              resArray.push(key);
+              try {
+                const regexp = new RegExp(`(?<=\<span.*${key}.*>).*?(?=\<\/span>)`);
+                const word = row.match(regexp)[0];
+                resArray.push({
+                  key: key,
+                  word: word,
+                });
+              } catch(err) {
+                console.log(err);
+              }
+              // resArray.push(key);
             }
           });
           return resArray;
@@ -110,13 +120,14 @@ export class ProcessCode {
         spArr.push({
           length: senVal.length,
           sentence: senVal,
-          hljsKeywords: keywordArray[senId]
+          // hljsKeywords: keywordArray[senId]
         });
 
         keywordArray[senId].forEach(keyVal => {
           epArr.push({
             index: senId,
-            type: keyVal,
+            type: keyVal.key,
+            word: keyVal.word,
             pos: {
               x: getRandomArbitrary(-50, 50),
               y: getRandomArbitrary(-200, 200),

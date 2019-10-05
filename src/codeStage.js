@@ -36,7 +36,12 @@ function setup() {
           resArray = [];
           HLJS_KEYWORDS.map(key => {
             if (row.match(key)) {
-              resArray.push(key);
+              const regexp = new RegExp(`(?<=\<span.*${key}.*>).*?(?=\<\/span>)`);
+              const word = row.match(regexp)[0];
+              resArray.push({
+                key: key,
+                word: word,
+              });
             }
           });
           return resArray;

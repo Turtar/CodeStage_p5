@@ -49,10 +49,11 @@ const KEYWORDS_COLOR = {
 };
 
 export class Enemy {
-  constructor(isTop, num, type, x, y) {
+  constructor(isTop, num, type, word, x, y) {
     this.isTop = isTop;
     this.sentenceNum = num;
     this.type = type;
+    this.word = word;
     this.x = x;
     this.y = y;
   }
@@ -62,12 +63,17 @@ export class Enemy {
     p.push();
     p.translate(stageScrollX, 0);
     p.fill(KEYWORDS_COLOR[this.type]);
-    p.ellipse(
+    // p.ellipse(
+    //   5 + this.sentenceNum * barW + barW / 2.0 + this.x,
+    //   p.height / 2.0 + this.y,
+    //   10,
+    //   10
+    // );
+    p.text(
+      this.word,
       5 + this.sentenceNum * barW + barW / 2.0 + this.x,
       p.height / 2.0 + this.y,
-      10,
-      10
-    );
+    )
     p.pop();
   }
 
