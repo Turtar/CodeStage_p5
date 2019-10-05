@@ -36,11 +36,13 @@ function setup() {
           resArray = [];
           HLJS_KEYWORDS.map(key => {
             if (row.match(key)) {
-              const regexp = new RegExp(`(?<=\<span.*${key}.*>).*?(?=\<\/span>)`);
+              const regexp = new RegExp(
+                `(?<=\<span.*${key}.*>).*?(?=\<\/span>)`
+              );
               const word = row.match(regexp)[0];
               resArray.push({
                 key: key,
-                word: word,
+                word: word
               });
             }
           });
@@ -85,7 +87,10 @@ function setup() {
         .add({
           targets: stagePart,
           zIndex: -100,
-          delay: 150
+          delay: 150,
+          complete: function() {
+            $(stagePart).css('display', 'none');
+          }
         });
     };
     fileReader.readAsText(file);
