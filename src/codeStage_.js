@@ -20,6 +20,7 @@ function setupFileListener() {
     processCode.addStageParams(topFiles[0], true);
     needUpdate = true;
     $('#top-stage').css('z-index', 1000);
+    // processCode.initTop();
   });
 
   let bottomFiles = [];
@@ -30,6 +31,7 @@ function setupFileListener() {
     processCode.addStageParams(bottomFiles[0], false);
     needUpdate = true;
     $('#bottom-stage').css('z-index', 1000);
+    // processCode.initBottom();
   });
 }
 

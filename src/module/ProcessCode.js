@@ -1,4 +1,4 @@
-import { codeAnime } from './AnimeFunc.js'
+import { codeAnime } from './AnimeFunc.js';
 
 const HLJS_KEYWORDS = [
   'hljs-keyword',
@@ -7,49 +7,49 @@ const HLJS_KEYWORDS = [
   'hljs-name',
 
   'hljs-link',
-  
+
   'hljs-built_in',
   'hljs-type',
-  
+
   'hljs-number',
   'hljs-class',
-  
+
   'hljs-string',
   'hljs-meta-string',
-  
+
   'hljs-regexp',
   'hljs-template-tag',
-  
-  'hljs-subst',  
+
+  'hljs-subst',
   'hljs-function',
   'hljs-title',
   'hljs-params',
   'hljs-formula',
-  
+
   'hljs-comment',
   'hljs-quote',
-  
+
   'hljs-doctag',
-  
+
   'hljs-meta',
   'hljs-meta-keyword',
   'hljs-tag',
-  
+
   'hljs-variable',
   'hljs-template-variable',
-  
+
   'hljs-attr',
   'hljs-attribute',
   'hljs-builtin-name',
-  
+
   'hljs-selection',
-  
+
   'hljs-bullet',
   'hljs-selector-tag',
   'hljs-selector-id',
   'hljs-selector-class',
   'hljs-selector-attr',
-  'hljs-selector-pseudo', 
+  'hljs-selector-pseudo'
 ];
 
 function getRandomArbitrary(min, max) {
@@ -94,16 +94,18 @@ export class ProcessCode {
         .split(/\r\n|\r|\n/)
         .map(row => {
           const resArray = [];
-          HLJS_KEYWORDS.forEach(key => { 
+          HLJS_KEYWORDS.forEach(key => {
             if (row.match(key)) {
               try {
-                const regexp = new RegExp(`(?<=\<span.*${key}.*>).*?(?=\<\/span>)`);
+                const regexp = new RegExp(
+                  `(?<=\<span.*${key}.*>).*?(?=\<\/span>)`
+                );
                 const word = row.match(regexp)[0];
                 resArray.push({
                   key: key,
-                  word: word,
+                  word: word
                 });
-              } catch(err) {
+              } catch (err) {
                 console.log(err);
               }
               // resArray.push(key);
@@ -119,7 +121,7 @@ export class ProcessCode {
       sentenceArray.forEach((senVal, senId) => {
         spArr.push({
           length: senVal.length,
-          sentence: senVal,
+          sentence: senVal
           // hljsKeywords: keywordArray[senId]
         });
 
@@ -130,7 +132,7 @@ export class ProcessCode {
             word: keyVal.word,
             pos: {
               x: getRandomArbitrary(-50, 50),
-              y: getRandomArbitrary(-200, 200),
+              y: getRandomArbitrary(-200, 200)
             }
           });
         });
@@ -147,5 +149,27 @@ export class ProcessCode {
       codeAnime(isTop);
     };
     fileReader.readAsText(file);
+  }
+
+  initTop() {
+    this.stageParams = {
+      top: [],
+      bottom: this.stageParams.bottom
+    };
+    this.enemyParams = {
+      top: [],
+      bottom: this.enemyParams.bottom
+    };
+  }
+
+  initBottom() {
+    this.stageParams = {
+      top: this.stageParams.top,
+      bottom: []
+    };
+    this.enemyParams = {
+      top: this.enemyParams.top,
+      bottom: []
+    };
   }
 }
